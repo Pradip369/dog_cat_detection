@@ -1,0 +1,25 @@
+# .dockerignore
+
+# Exclude development and build related directories
+__pycache__/
+media/
+static/
+
+# Exclude log files
+*.log
+
+# Exclude compiled Python files
+*.pyc
+
+# Exclude system and temporary files
+.DS_Store
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
+*~
+
+# Exclude version control directories
+.git/
+.gitignore

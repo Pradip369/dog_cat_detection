@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name:
+      - cat_dog_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+      - ./db.sqlite3:/code/db.sqlite3
+    env_file:
+      - .env
+    depends_on:
+      - minio
+
+  minio:
+      image: minio/minio
+      container_name:
+        - minio_db
+      hostname: "minio"
+      volumes:
+        - ./minio:/minio_files
+      env_file:
+        - .env
+      command: 'minio server /minio_files --console-address ":9001"'
+      ports:
+        - 9000:9000
+        - 9001:9001
+
+  minio_bucket:
+      image: minio/mc
+      container_name:
+        - minio_bucket
+      depends_on:
+        - minio
+      env_file:
+        - .env
+      entrypoint: >
+        /bin/sh -c "
+        /usr/bin/mc config host add dog-or-cat http://minio:9000 minioadmin minioadmin;
+        "
